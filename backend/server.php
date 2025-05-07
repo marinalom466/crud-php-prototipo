@@ -18,7 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once("./routes/studentsRoutes.php"); 
-/* 
+/* incluye el archivo que define las RUTAS o la lógica que responderá a la peticion actual
    usa require once para incluirlo una sola vez, lo que evita errores por multiples inclusiones
  */
+/* este archivo debería analizar la URL, metodo y decidir qué controlador invocar. controlador?
+ */
+
+ /* tiene que estar preparado para modulos futuros
+ analizando la URL y decidiendo qué archivo de ruta invocar usando alguna convencion
+ un switch?
+  */
 ?>
