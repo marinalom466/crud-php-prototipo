@@ -1,4 +1,6 @@
 <?php
+//archivo que maneja, a partir de comando sql, la tabla students, agregar, eliminar, consultar y modificar
+
 function getAllStudents($conn) {
     $sql = "SELECT * FROM students";
     return $conn->query($sql);
