@@ -1,5 +1,8 @@
 //frontDispatcher_2.0
-const API_URL = '../backend/server.php';
+//const API_URL = '../backend/server.php';
+//const API_URL = '../backend/api/students'; este funciona si la unica ruta posible es students
+const API_URL = '../backend/api/'; //voy a server
+
 
 document.addEventListener('DOMContentLoaded', () => 
 {
@@ -9,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () =>
     const emailInput = document.getElementById('email');
     const ageInput = document.getElementById('age');
     const studentIdInput = document.getElementById('studentId');
+    const optioncategory= document.getElementById('type'); //para poder usar el mismo js para modulos futuros, no funciona todavía
 
     // Leer todos los estudiantes al cargar
     fetchStudents();
@@ -29,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () =>
 
         try 
         {
-            const response = await fetch(API_URL, {
+            const response = await fetch(API_URL + optioncategory, {//concatenamos el api default y la ruta a la q deberíamos ir, no funciona todavía
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -42,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () =>
             } else {
                 alert("Error al guardar");
             }
-        } catch (err) {
+        } catch (err) { //me guarda qué generó ese error
             console.error(err);
         }
     });
@@ -52,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () =>
     {
         try 
         {
-            const res = await fetch(API_URL);
+            const res = await fetch(API_URL + optioncategory);
             const students = await res.json();
 
             //Limpiar tabla de forma segura.
@@ -111,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () =>
 
         try 
         {
-            const response = await fetch(API_URL, {
+            const response = await fetch(API_URL + optioncategory, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id }),

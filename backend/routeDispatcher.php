@@ -18,6 +18,7 @@ function  getParsedPath (string $url) { /* me devuelve el nombre de la ruta
 
 function dispatchRoute (string $url) : void  //me dirige a la ruta si es que existe o al error 404
 {
+    //var_dump($url);
     $availableRoutes = getRoutes();
     $path = getParsedPath($url);
 
