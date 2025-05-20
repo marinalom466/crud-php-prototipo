@@ -29,6 +29,41 @@ INSERT INTO students (fullname, email, age) VALUES
 ('Lucas Torres', 'lucas@example.com', 24),
 ('Marina Díaz', 'marina@example.com', 22);
 
+--Crear la tabla subjects
+CREATE TABLE subjects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+) ENGINE=INNODB;
+
+--Insertar materias de prueba
+INSERT INTO subjects (name) VALUES 
+('Tecnologías A'), 
+('Tecnologías B'), 
+('Algoritmos y Estructura de Datos I'), 
+('Fundamentos de Informática');
+
+--Crear TABLA INTERMEDIA students_subjects
+--Clave primaria compuesta (student_id, subject_id): garantiza que un estudiante
+-- no tenga dos veces la misma materia.
+
+--approved: si está aprobada la materia o no (por defecto FALSE).
+
+--ON DELETE CASCADE: si eliminás un estudiante o materia, se borra
+-- su asignación automáticamente.
+CREATE TABLE students_subjects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    subject_id INT NOT NULL,
+    approved BOOLEAN DEFAULT FALSE,
+    UNIQUE (student_id, subject_id),
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+) ENGINE=INNODB;
+
+--Insertar relaciones de prueba students_subjects
+INSERT INTO students_subjects (student_id, subject_id, approved) VALUES
+(1, 1, 1),
+(2, 2, 0);
 
 --VOLVER TODO A CERO, BORRAR BASE DE DATOS Y USUARIO
 --REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'students_user'@'localhost';

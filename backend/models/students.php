@@ -1,6 +1,6 @@
 <?php
 //archivo que maneja, a partir de comando sql, la tabla students, agregar, eliminar, consultar y modificar
-
+//en la nueva version del crud este tambien se mantiene igual
 function getAllStudents($conn) {
     $sql = "SELECT * FROM students";
     return $conn->query($sql);

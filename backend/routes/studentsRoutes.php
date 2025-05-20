@@ -1,23 +1,40 @@
 <?php
+//porque este archivo cambia por completo la forma de manejar el request method?
 require_once("./config/databaseConfig.php");
+require_once("./routes/routesFactory.php");
 require_once("./controllers/studentsController.php");
 
-switch ($_SERVER['REQUEST_METHOD']) {
-    case 'GET':
-        handleGet($conn);
-        break;
-    case 'POST':
+// routeRequest($conn);
+
+/**
+ * switch ($_SERVER['REQUEST_METHOD']) ya no es necesario
+ * su funcion es la misma que la de routesFactory
+ */
+
+ 
+/**
+ * Ejemplo de como se extiende un archivo de rutas 
+ * para casos particulares
+ * o validaciones:
+ */
+
+routeRequest($conn, [
+    'POST' => function($conn) 
+    {
+        // Validación o lógica extendida
+        $input = json_decode(file_get_contents("php://input"), true);
+        if (empty($input['fullname'])) 
+        {
+            http_response_code(400);
+            echo json_encode(["error" => "Falta el nombre"]);//esto es solo en caso de que no hayan puesto el nombre
+            return;
+        }
         handlePost($conn);
-        break;
-    case 'PUT':
-        handlePut($conn);
-        break;
-    case 'DELETE':
-        handleDelete($conn);
-        break;
-    default:
-        http_response_code(405);
-        echo json_encode(["error" => "Método no permitido"]);
-        break;
-}
+    }
+]);
+
+/**
+ * que hace este archivo concretamente? 
+ * si no llamo al routeRequest con el post concretamente que es lo que hace?
+*/
 ?>

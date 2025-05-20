@@ -1,4 +1,6 @@
 <?php
+//este archivo se encarga de manejar las peticiones HTTP relacionadas con los estudiantes
+//se mantiene igual en el nuevo crud
 require_once("./models/students.php");
 
 function handleGet($conn) {
