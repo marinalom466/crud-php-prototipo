@@ -1,9 +1,11 @@
-//fabrica que genera un obejto para interactuar con una api backend con un modulo especifico
+//fabrica que genera un objeto para interactuar con una api backend con un modulo especifico
 
 export function createAPI(moduleName, config = {}) //la config va vacia porque no se usa 
+//el config se usa en el caso de que se quiera cambiar la url del backend
 {
     const API_URL = config.urlOverride ?? `../../backend/server.php?module=${moduleName}`;
-
+    //el ?? es un operador de coalescencia nula, si no existe la urlOverride se usa la url por defecto
+    //se queda con lo primero que no es null
     async function sendJSON(method, data) 
     {
         const res = await fetch(API_URL,

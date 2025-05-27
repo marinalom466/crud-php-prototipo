@@ -1,5 +1,4 @@
 <?php
-//porque este archivo cambia por completo la forma de manejar el request method?
 require_once("./config/databaseConfig.php");
 require_once("./routes/routesFactory.php");
 require_once("./controllers/studentsController.php");
@@ -9,6 +8,7 @@ require_once("./controllers/studentsController.php");
 /**
  * switch ($_SERVER['REQUEST_METHOD']) ya no es necesario
  * su funcion es la misma que la de routesFactory
+ * es apto a handlers customizados 
  */
 
  
@@ -34,7 +34,6 @@ routeRequest($conn, [
 ]);
 
 /**
- * que hace este archivo concretamente? 
  * si no llamo al routeRequest con el post concretamente que es lo que hace?
 */
 ?>

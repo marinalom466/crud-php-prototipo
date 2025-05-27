@@ -39,6 +39,19 @@ function handlePut($conn) {
 
 function handleDelete($conn) {
     $input = json_decode(file_get_contents("php://input"), true);
+    $studentId = $input['student_id'];
+    $stmt = $conn->prepare("SELECT 1 FROM students_subjects WHERE student_id = ? ");
+    $stmt->bind_param("i", $studentId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        http_response_code(400);
+        echo json_encode(["error" => "No se puede eliminar porque el estudiante tiene materias asignadas"]);
+        return;
+    }
+
+    // Si no hay materias asignadas, procede a eliminar el estudiante
     if (deleteStudent($conn, $input['id'])) {
         echo json_encode(["message" => "Eliminado correctamente"]);
     } else {

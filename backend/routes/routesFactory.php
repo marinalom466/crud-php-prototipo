@@ -6,7 +6,7 @@ function routeRequest($conn, $customHandlers = [], $prefix = 'handle') //recibe 
 
     // Lista de handlers CRUD por defecto
     $defaultHandlers = [
-        'GET'    => $prefix . 'Get', //no entiendo porque no puede usar handle y necesita el $prefix
+        'GET'    => $prefix . 'Get', //necesita el $prefix para los proximos customizados
         'POST'   => $prefix . 'Post',
         'PUT'    => $prefix . 'Put',
         'DELETE' => $prefix . 'Delete'

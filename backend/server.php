@@ -1,20 +1,21 @@
 <?php
-// darle acceso a ciertas rutas del servidor, para
 
 ini_set('display_errors', 1);// indica a php que muestre los errores directamente por pantalla
 error_reporting(E_ALL);  //muestra todos los tipos de errores 
 
 header("Access-Control-Allow-Origin: *"); /** permite que cualquier frontend, desde cualquier origen *,
   *pueda acceder al backend. es peligroso en temas de seguridad esto o no tiene que ver?  
-  *a que se refiere con front end? al lenguaje? */
-  /* es necesario cuando el frontend y backend no estan en el mismo dominio o puerto */
+  *a que se refiere con front end? al lenguaje? 
+  * es necesario cuando el frontend y backend no estan en el mismo dominio o puerto 
+  */
 
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS"); //indica al navegador los metodos http aceptados por el bcend
 header("Access-Control-Allow-Headers: Content-Type"); /** permite las solicitudes con ciertos encabezados
 *ese encabezado solo permite el nombre del encabezado, no sus valores
-*el tipo de contenido se chequea en el backend*/
+*el tipo de contenido se chequea en el backend
+*/
 
-function sendCodeMessage($code, $message = "") //valida la existencia del modulo
+function sendCodeMessage($code, $message = "") //manda el mensaje sea cual sea el error
 {
     http_response_code($code);
     echo json_encode(["message" => $message]);

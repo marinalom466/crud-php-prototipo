@@ -1,0 +1,15 @@
+atributo pattern html
+usa expresiones regulares
+patern-title-required
+
+como validar algo en el frontend? -->
+
+siempre va a ser lo que no cambia, encapsularlo porque tiene reuso (la api y routes factory por ejemplo)
+
+abstraccion es un concepto a partir del cual filtramos aquello que no es importante
+
+buscar como subir/agregar archivos
+
+validacion q vaya hasta el bcend y vuelva
+
+autenticacion autorizacion accounting

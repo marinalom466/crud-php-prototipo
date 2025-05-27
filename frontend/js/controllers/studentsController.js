@@ -115,13 +115,22 @@ function fillForm(student)
     document.getElementById('email').value = student.email;
     document.getElementById('age').value = student.age;
 }
-  
+
 async function confirmDelete(id) 
 {
     if (!confirm('¿Estás seguro que deseas borrar este estudiante?')) return;
   
     try 
     {
+        const existingRelations = await subjectsAPI.fetchAll();
+        const StudentIsRelated = existingRelations.some(rel => String(rel.student_id) === String(id));
+    
+        if (StudentIsRelated)
+        {
+            alert('No se puede borrar el estudiante porque tiene materias asociadas.');
+            return; //frena la ejecución si el estudiante tiene materias asociadas
+        }
+        //si no, procede a borrar el estudiante
         await studentsAPI.remove(id);
         loadStudents();
     } 

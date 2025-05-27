@@ -60,6 +60,17 @@ function setupFormHandler()
             } 
             else 
             {
+                //traer todas las relaciones actuales
+                const allRelations = await studentsSubjectsAPI.fetchAll();
+                //buscar si ya existe una relación con ese estudiante y esa materia
+                const alreadyExists = allRelations.some(r => r.student_id === relation.student_id && r.subject_id === relation.subject_id);
+
+                if (alreadyExists)
+                {
+                    alert('La relación entre ese estudiante y materia ya existe.');
+                    return; //frena la ejecución si ya existe una relación con ese estudiante y esa materia
+                }
+
                 await studentsSubjectsAPI.create(relation);
             }
             clearForm();
