@@ -1,15 +1,30 @@
+/**
+*    File        : frontend/js/controllers/subjectsController.js
+*    Project     : CRUD PHP
+*    Author      : Tecnologías Informáticas B - Facultad de Ingeniería - UNMdP
+*    License     : http://www.gnu.org/licenses/gpl.txt  GNU GPL 3.0
+*    Date        : Mayo 2025
+*    Status      : Prototype
+*    Iteration   : 3.0 ( prototype )
+*/
+
 import { subjectsAPI } from '../api/subjectsAPI.js';
+import { studentsSubjectsAPI } from '../api/studentsSubjectsAPI.js';  //lo necesito para no borrar materias que tengan estudiantes asociados
 //hacemos uso de las funciones de la apifactory y creas el objeto
 
 /**
  * los nombres de las funciones son los mismos que los de la apiFactory
- * son medio autoexplicativas pero debería igual leerlas bien por dentro para entender la logica de cada una
+ * son medio autoexplicativas 
+ * 
+ * las funciones de este archivoy sus descripciones son basicamente iguales a las de studentscontroller.js
+ * pero referido a las materias
 */
 
 document.addEventListener('DOMContentLoaded', () => 
 {
     loadSubjects();
     setupSubjectFormHandler();
+    setupCancelHandler();
 });
 
 function setupSubjectFormHandler() 
@@ -60,6 +75,15 @@ function setupSubjectFormHandler()
             console.error(err.message);
         }
   });
+}
+
+function setupCancelHandler()
+{
+    const cancelBtn = document.getElementById('cancelBtn');
+    cancelBtn.addEventListener('click', () => 
+    {
+        document.getElementById('subjectId').value = '';
+    });
 }
 
 async function loadSubjects()
@@ -121,14 +145,14 @@ function createSubjectActionsCell(subject)
     return td;
 }
 
-async function confirmDeleteSubject(id)
+async function confirmDeleteSubject(id) //este funciona
 {
     if (!confirm('¿Seguro que deseas borrar esta materia?')) return;
 
     try
     {
-        const existingRelations = await subjectsAPI.fetchAll();
-        const SubjectIsRelated = existingRelations.some(rel => rel.subject_id === id);
+        const existingRelations = await studentsSubjectsAPI.fetchAll();
+        const SubjectIsRelated = existingRelations.some(rel => rel.id === id);
 
         if (SubjectIsRelated)
         {

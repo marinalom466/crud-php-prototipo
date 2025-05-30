@@ -1,4 +1,14 @@
 <?php
+/**
+*    File        : backend/controllers/subjectsController.php
+*    Project     : CRUD PHP
+*    Author      : Tecnologías Informáticas B - Facultad de Ingeniería - UNMdP
+*    License     : http://www.gnu.org/licenses/gpl.txt  GNU GPL 3.0
+*    Date        : Mayo 2025
+*    Status      : Prototype
+*    Iteration   : 3.0 ( prototype )
+*/
+
 //este archivo hace lo mismo que el studentsController.php pero para la tabla subjects
 //las funciones son identicas excepto por el nombre de la tabla y los nombres de las columnas
 //se podrán estandarizar de alguna forma?
@@ -6,17 +16,16 @@ require_once("./models/subjects.php");
 
 function handleGet($conn) 
 {
-    if (isset($_GET['id'])){
-        $result = getSubjectById($conn, $_GET['id']);
-        echo json_encode($result->fetch_assoc());
-    } else{
-        $result = getAllSubjects($conn);
-        $data = [];
-        while ($row = $result->fetch_assoc()) 
-        {
-            $data[] = $row;
-        }
-        echo json_encode($data);
+    $input = json_decode(file_get_contents("php://input"), true);
+    
+    if (isset($input['id']))
+    {
+        $subject = getSubjectById($conn, $input['id']);
+        echo json_encode($subject);
+    } 
+    else{
+        $subjects = getAllSubjects($conn);
+        echo json_encode($subjects);
     }
 }
 
@@ -25,7 +34,8 @@ function handlePost($conn)
     $input = json_decode(file_get_contents("php://input"), true);
 
     $nombre = $input['name'];
-    //stmt es una variable que contiene la consulta sql preparada
+    /*
+    stmt es una variable que contiene la consulta sql preparada
     $stmt = $conn->prepare("SELECT * FROM subjects WHERE  LOWER(name) = LOWER(?)"); //ve
     //la funcion lower convierte el texto a minusculas para evitar problemas de mayusculas y minusculas
     $stmt->bind_param("s", $nombre);//ayuda a evitar inyecciones sql ya que solo permite datos de tipo string
@@ -38,8 +48,10 @@ function handlePost($conn)
         echo json_encode(["error" => "Ya existe una materia con ese nombre"]);
         return;
     }
+    */
 
-    if (createSubject($conn, $input['name']))  //si no existe crearla
+    $result = createSubject($conn, $nombre); 
+    if ($result['inserted']>0)  //si no existe crearla
     {
         echo json_encode(["message" => "Materia creada correctamente"]);
     } 
@@ -53,7 +65,9 @@ function handlePost($conn)
 function handlePut($conn) 
 {
     $input = json_decode(file_get_contents("php://input"), true);
-    if (updateSubject($conn, $input['id'], $input['name'])) 
+    
+    $result = updateSubject($conn, $input['id'], $input['name']);
+    if ($result['updated']>0) 
     {
         echo json_encode(["message" => "Materia actualizada correctamente"]);
     } 
@@ -64,7 +78,7 @@ function handlePut($conn)
     }
 }
 
-function handleDelete($conn) 
+function handleDelete($conn) //hay q cambiarlo, no puede hacer consultas sql
 {
     $input = json_decode(file_get_contents("php://input"), true);
 
@@ -82,7 +96,8 @@ function handleDelete($conn)
         return;
     }
     // si no hay estudiantes asignados, procede a eliminar la materia
-    if (deleteSubject($conn, $input['id'])) 
+    $result = deleteSubject($conn, $input['id']);
+    if ($result['deleted']>0) 
     {
         echo json_encode(["message" => "Materia eliminada correctamente"]);
     } 

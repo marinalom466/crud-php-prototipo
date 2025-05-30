@@ -1,17 +1,28 @@
+/**
+*    File        : frontend/js/controllers/studentsSubjectsController.js
+*    Project     : CRUD PHP
+*    Author      : Tecnologías Informáticas B - Facultad de Ingeniería - UNMdP
+*    License     : http://www.gnu.org/licenses/gpl.txt  GNU GPL 3.0
+*    Date        : Mayo 2025
+*    Status      : Prototype
+*    Iteration   : 3.0 ( prototype )
+*/
+
 import { studentsAPI } from '../api/studentsAPI.js';
 import { subjectsAPI } from '../api/subjectsAPI.js';
 import { studentsSubjectsAPI } from '../api/studentsSubjectsAPI.js'; //no lo usamos pero lo importamos para que no de error
 //este archivo es el que se encarga de cargar los estudiantes y las materias, y de crear la relación entre ellos
 
-//tengo que leerlo mas a fondo
 document.addEventListener('DOMContentLoaded', () => 
 {
-    initSelects();
+    initSelects();//Se cargan los <select> con estudiantes y materias.
     setupFormHandler();
+    setupCancelHandler(); //para que al hacer click en el botón cancelar se limpie el formulario
     loadRelations();
 });
 
-async function initSelects() 
+async function initSelects() //Carga estudiantes y materias en sus respectivos <select>.
+
 {
     try 
     {
@@ -50,11 +61,11 @@ function setupFormHandler()
     {
         e.preventDefault();
 
-        const relation = getFormData();
+        const relation = getFormData();//lo llama para armar el objeto
 
         try 
         {
-            if (relation.id) 
+            if (relation.id) //si hay id hace update
             {
                 await studentsSubjectsAPI.update(relation);
             } 
@@ -73,13 +84,22 @@ function setupFormHandler()
 
                 await studentsSubjectsAPI.create(relation);
             }
-            clearForm();
-            loadRelations();
+            clearForm(); //limpia el formulario
+            loadRelations();//recarga la tabla
         } 
         catch (err) 
         {
             console.error('Error guardando relación:', err.message);
         }
+    });
+}
+
+function setupCancelHandler()//Resetea el formulario 
+{
+    const cancelBtn = document.getElementById('cancelBtn');
+    cancelBtn.addEventListener('click', () => 
+    {
+        document.getElementById('relationId').value = '';//limpia el campo oculto relationId
     });
 }
 
@@ -89,14 +109,16 @@ function getFormData()
         id: document.getElementById('relationId').value.trim(),
         student_id: document.getElementById('studentIdSelect').value,
         subject_id: document.getElementById('subjectIdSelect').value,
-        approved: document.getElementById('approved').checked ? 1 : 0
+        approved: document.getElementById('approved').checked ? 1 : 0 
+        //Convierte el checkbox a entero (1 o 0), para facilitar la compatibilidad con el backend (MySQL no tiene true/false).
+
     };
 }
 
 function clearForm() 
 {
     document.getElementById('relationForm').reset();
-    document.getElementById('relationId').value = '';
+    document.getElementById('relationId').value = '';//limpia el campo oculto relationId
 }
 
 async function loadRelations() 
@@ -120,8 +142,8 @@ async function loadRelations()
          */
         relations.forEach(rel => 
         {
-            rel.approved = Number(rel.approved);
-        });
+            rel.approved = Number(rel.approved);//convierte el campo approved a numero real
+        }); //evita que "0"(string) sea considerado truthy.
         
         renderRelationsTable(relations);
     } 
@@ -138,7 +160,7 @@ function renderRelationsTable(relations)
 
     relations.forEach(rel => 
     {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); //DOM seguro
 
         // tr.appendChild(createCell(rel.fullname || rel.student_id));old
         tr.appendChild(createCell(rel.student_fullname));
@@ -177,7 +199,9 @@ function createActionsCell(relation)
     return td;
 }
 
-function fillForm(relation) 
+function fillForm(relation)
+//Llena el formulario con los datos de una relación seleccionada para edición.
+ 
 {
     document.getElementById('relationId').value = relation.id;
     document.getElementById('studentIdSelect').value = relation.student_id;
@@ -185,7 +209,7 @@ function fillForm(relation)
     document.getElementById('approved').checked = !!relation.approved;
 }
 
-async function confirmDelete(id) 
+async function confirmDelete(id) //Confirma el borrado con window.confirm()
 {
     if (!confirm('¿Estás seguro que deseas borrar esta inscripción?')) return;
 

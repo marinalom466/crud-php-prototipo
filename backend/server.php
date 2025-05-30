@@ -1,11 +1,22 @@
 <?php
+/**
+*    File        : backend/server.php
+*    Project     : CRUD PHP
+*    Author      : Tecnologías Informáticas B - Facultad de Ingeniería - UNMdP
+*    License     : http://www.gnu.org/licenses/gpl.txt  GNU GPL 3.0
+*    Date        : Mayo 2025
+*    Status      : Prototype
+*    Iteration   : 3.0 ( prototype )
+*/
 
-ini_set('display_errors', 1);// indica a php que muestre los errores directamente por pantalla
-error_reporting(E_ALL);  //muestra todos los tipos de errores 
+/** FOR DEBUG:
+ * ini_set('display_errors', 1);  indica a php que muestre los errores directamente por pantalla
+ * ini_set('display_startup_errors', 1); muestra errores de inicio de php, como problemas de configuracion
+ * error_reporting(E_ALL);  muestra todos los tipos de errores 
+ */
 
-header("Access-Control-Allow-Origin: *"); /** permite que cualquier frontend, desde cualquier origen *,
-  *pueda acceder al backend. es peligroso en temas de seguridad esto o no tiene que ver?  
-  *a que se refiere con front end? al lenguaje? 
+header("Access-Control-Allow-Origin: *"); /** permite que cualquier sitio web se comunique con este servidor
+  * en prod * se suele reemplazar por una dirección específica  
   * es necesario cuando el frontend y backend no estan en el mismo dominio o puerto 
   */
 
@@ -22,14 +33,12 @@ function sendCodeMessage($code, $message = "") //manda el mensaje sea cual sea e
     exit();
 }
 
-
-
+//respuesta correcta para solicitudes OPTIONS (preflight)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { /** el metodo options atiende preflights requests del navegador
   *It is an HTTP request of the OPTIONS method, sent before the request itself, 
   *in order to determine if it is safe to send it.
  */
     sendCodeMessage(200);
-    exit();
 }
 
 // require_once("./routes/studentsRoutes.php"); 
@@ -75,7 +84,8 @@ if (!preg_match('/^\w+$/', $module))// devuelve la cantidad de matcheos o falso
 // Buscar el archivo de ruta correspondiente
 $routeFile = __DIR__ . "/routes/{$module}Routes.php"; //se podrá hacer a partir de renombramientos como haciamos en el routedispatcher? 
 
-if (file_exists($routeFile)){
+if (file_exists($routeFile))
+{
     require_once($routeFile); //incluye el archivo y ejecuta el código dentro de él
 } else{
     sendCodeMessage(404, "Ruta para el módulo '{$module}' no encontrada"); //reemplaza el archivo de errores que teniamos
