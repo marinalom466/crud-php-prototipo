@@ -27,33 +27,24 @@ function handlePost($conn)
      * necesitamos validar que los datos que vienen del json son correctos de otra forma
     */
     
-    /*
     $studentId = $input['student_id'];
     $subjectId = $input['subject_id'];
     $approved = $input['approved'];
 
-    // Verificar si ya existe una asignación con el mismo estudiante y materia
-    $stmt = $conn->prepare("SELECT * FROM students_subjects WHERE student_id = ? AND subject_id = ?"); 
     /** 
      * el ? es un placeholder, para declarar un parámetro que se pasará más adelante
      * esto ayuda a evitar inyecciones sql ya que solo permite datos de tipo entero
     */ 
 
-    /*
-    $stmt->bind_param("ii", $studentId, $subjectId); //asociamos los parametros a la consulta preparada
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) //significa que encontró una relación existente
+    if (relationAlreadyExists($conn, $subjectId, $studentId)) //significa que encontró una relación existente
     {
         http_response_code(400);
         echo json_encode(["error" => "Ya existe una relación entre este estudiante y materia"]);
         return;
-    }*/
+    }
     
     // si no existe, procede a crear la asignación
-
-    $result = assignSubjectToStudent($conn, $input['student_id'], $input['subject_id'], $input['approved']);
+    $result = assignSubjectToStudent($conn, $studentId, $subjectId, $approved);
     if ($result['inserted']>0) 
     {
         echo json_encode(["message" => "Asignación realizada"]);

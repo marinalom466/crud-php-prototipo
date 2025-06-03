@@ -152,7 +152,9 @@ async function confirmDeleteSubject(id) //este funciona
     try
     {
         const existingRelations = await studentsSubjectsAPI.fetchAll();
-        const SubjectIsRelated = existingRelations.some(rel => rel.id === id);
+        const SubjectIsRelated = existingRelations.some(rel => rel.subject_id === id);
+        //console.log('existingRelations',existingRelations);
+        console.log(existingRelations); // Mira la estructura de los objetos
 
         if (SubjectIsRelated)
         {

@@ -56,18 +56,14 @@ function handleDelete($conn) {
     $input = json_decode(file_get_contents("php://input"), true);
 
     $studentId = $input['student_id'];
-    $stmt = $conn->prepare("SELECT 1 FROM students_subjects WHERE student_id = ? "); //esto hay que cambiarlo, no puede tener consultas sql
-    $stmt->bind_param("i", $studentId);
-    $stmt->execute();
-    $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
+    if (studentHasSubjects($conn, $studentId)) { //funcion de models/students.php
         http_response_code(400);
         echo json_encode(["error" => "No se puede eliminar porque el estudiante tiene materias asignadas"]);
         return;
     }
 
-    $result = deleteStudent($conn, $input['id']); //reuso la variable result
+    $result = deleteStudent($conn, $input['id']); 
     // Si no hay materias asignadas, procede a eliminar el estudiante
     if ($result['deleted']>0) {
         echo json_encode(["message" => "Eliminado correctamente"]);

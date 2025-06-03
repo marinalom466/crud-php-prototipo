@@ -77,4 +77,16 @@ function removeStudentSubject($conn, $id)
 
     return ['deleted' => $stmt->affected_rows];
 }
+
+function relationAlreadyExists($conn, $subject_id, $student_id) 
+{
+    $stmt = $conn->prepare("SELECT 1 FROM students_subjects WHERE subject_id = ? AND student_id = ?"); 
+    //el ? es un placeholder, para declarar un parámetro que se pasará más adelante
+    $stmt->bind_param("ii", $subject_id, $student_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return $result->num_rows > 0; // devuelve true si ya existe una relación entre el estudiante y la materia
+}
+
 ?>

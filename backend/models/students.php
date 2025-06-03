@@ -63,4 +63,16 @@ function deleteStudent($conn, $id)
     //se retorna fila adectada para validar en controlador
     return ['deleted'=> $stmt->affected_rows];
 }
+
+function studentHasSubjects($conn, $studentId)  //funcion que verifica si un estudiante tiene materias asignadas
+//es para que la use el studentsController.php al eliminar un estudiante
+{
+    $stmt = $conn->prepare("SELECT 1 FROM students_subjects WHERE student_id = ?");
+    $stmt->bind_param("i", $studentId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return $result->num_rows > 0; //devuelve true si el estudiante tiene materias asignadas
+}
+
 ?>

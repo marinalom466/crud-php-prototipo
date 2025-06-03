@@ -50,7 +50,7 @@ function setupCancelHandler() //configura la cancelacion del formulario
     });//Cuando el botón se hace clic, se borra el valor del campo oculto studentId.
     //evita errores al cancelar una modificacion
 }
-  
+
 function getFormData() //obtiene datos del form
 {//se crea un objeto JS (data object) con los datos del formulario
     return {
@@ -140,7 +140,8 @@ async function confirmDelete(id)
     try 
     {
         const existingRelations = await studentsSubjectsAPI.fetchAll();
-        const StudentIsRelated = existingRelations.some(rel => rel.id === id);
+        const StudentIsRelated = existingRelations.some(rel => rel.student_id === id);
+        //console.log('existingRelations', existingRelations); // Mira la estructura de los objetos
         //console.log('StudentIsRelated:', StudentIsRelated);
         if (StudentIsRelated)
         {

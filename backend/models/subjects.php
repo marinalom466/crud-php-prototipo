@@ -59,4 +59,15 @@ function deleteSubject($conn, $id)
 
     return ['deleted' => $stmt->affected_rows]; 
 }
+
+function subjectHasStudents($conn, $subjectId) 
+{    
+    $stmt = $conn->prepare("SELECT 1 FROM students_subjects WHERE subject_id = ?");
+    $stmt->bind_param("i", $subjectId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    return $result->fetch_row()[0] > 0; // devuelve true si hay estudiantes asignados a la materia
+}
+
 ?>

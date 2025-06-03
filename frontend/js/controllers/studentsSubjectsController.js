@@ -15,14 +15,14 @@ import { studentsSubjectsAPI } from '../api/studentsSubjectsAPI.js'; //no lo usa
 
 document.addEventListener('DOMContentLoaded', () => 
 {
+    loadRelations();
     initSelects();//Se cargan los <select> con estudiantes y materias.
     setupFormHandler();
     setupCancelHandler(); //para que al hacer click en el botón cancelar se limpie el formulario
-    loadRelations();
+    
 });
 
 async function initSelects() //Carga estudiantes y materias en sus respectivos <select>.
-
 {
     try 
     {
@@ -70,7 +70,7 @@ function setupFormHandler()
                 await studentsSubjectsAPI.update(relation);
             } 
             else 
-            {
+            {   
                 //traer todas las relaciones actuales
                 const allRelations = await studentsSubjectsAPI.fetchAll();
                 //buscar si ya existe una relación con ese estudiante y esa materia
@@ -158,7 +158,7 @@ function renderRelationsTable(relations)
     const tbody = document.getElementById('relationTableBody');
     tbody.replaceChildren();
 
-    relations.forEach(rel => 
+    relations.forEach(rel =>    
     {
         const tr = document.createElement('tr'); //DOM seguro
 

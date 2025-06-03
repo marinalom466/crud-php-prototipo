@@ -34,9 +34,14 @@ function handlePost($conn)
     $input = json_decode(file_get_contents("php://input"), true);
 
     $nombre = $input['name'];
+
+    /**
+     * no necesito hacer una consulta para ver si existe una materia con ese nombre
+     * porque lo hace la misma base de datos al definir el campo name como UNIQUE
+     */
     /*
     stmt es una variable que contiene la consulta sql preparada
-    $stmt = $conn->prepare("SELECT * FROM subjects WHERE  LOWER(name) = LOWER(?)"); //ve
+    $stmt = $conn->prepare("SELECT * FROM subjects WHERE  LOWER(name) = LOWER(?)"); 
     //la funcion lower convierte el texto a minusculas para evitar problemas de mayusculas y minusculas
     $stmt->bind_param("s", $nombre);//ayuda a evitar inyecciones sql ya que solo permite datos de tipo string
     $stmt->execute();
@@ -83,13 +88,8 @@ function handleDelete($conn) //hay q cambiarlo, no puede hacer consultas sql
     $input = json_decode(file_get_contents("php://input"), true);
 
     $subjectId = $input['subject_id'];
-    $stmt = $conn->prepare("SELECT 1 FROM students_subjects WHERE subject_id = ?"); 
-    //hace select 1 y no select * porque no importa que columnas tenga la tabla, solo nos interesa si hay o no registros con ese id
-    $stmt->bind_param("i", $subjectId); //asociamos el parametro a la consulta preparada
-    $stmt->execute();
-    $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) //significa que encontró una relación existente
+    if (subjectHasStudents($conn, $subjectId)) //significa que encontró una relación existente
     {
         http_response_code(400);
         echo json_encode(["error" => "No se puede eliminarla materia porque hay estudiantes asignados a esta materia"]);

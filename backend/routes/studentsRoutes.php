@@ -15,7 +15,7 @@ require_once("./controllers/studentsController.php");
 
 //Actúa como un "puente" entre la solicitud que llega del frontend y el controlador que se encarga de procesarla
 
-// routeRequest($conn);
+routeRequest($conn);
 
 /**
  * switch ($_SERVER['REQUEST_METHOD']) ya no es necesario
@@ -29,7 +29,7 @@ require_once("./controllers/studentsController.php");
  * para casos particulares o validaciones:
  */
 
-routeRequest($conn, [
+/* routeRequest($conn, [
     'POST' => function($conn) //si la solicitud http es post, sucede esta validacion
     {
         // Validación o lógica extendida
@@ -43,5 +43,5 @@ routeRequest($conn, [
         handlePost($conn);
     }
 ]);
-
+*/
 ?>

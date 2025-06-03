@@ -8,8 +8,6 @@
 *    Iteration   : 3.0 ( prototype )
 */
 
-
-
 //fabrica que genera un objeto para interactuar con una api backend con un modulo especifico
 
 export function createAPI(moduleName, config = {}) //la config va vacia porque no se usa 
